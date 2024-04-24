@@ -3,7 +3,7 @@ import TaskForm from './taskForm';
 import { useState } from 'react';
 import { doDBOperations } from './taskOperations';
 
-export default function TaskItem({ id, title, priority, category, message, handleDelete, completed }) {
+export default function TaskItem({ id, title, priority, category, message, deleteTask, completed }) {
 
     const [isChecked, setIsChecked] = useState(completed || false);
 
@@ -16,7 +16,7 @@ export default function TaskItem({ id, title, priority, category, message, handl
     const handleDelete = (id) => {
         console.log('deleting task with id', id);
         doDBOperations({ id }, 'delete');
-        handleDelete();
+        deleteTask();
     }
 
 
