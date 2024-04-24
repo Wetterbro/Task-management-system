@@ -10,6 +10,10 @@ async function dropTable() {
   db.deleteObjectStore('tasks');
 }
 
+async function updateTask(task) {
+  const db = await initDB();
+  await db.put('tasks', task);
+}
 
 async function addTask(task) {
   const db = await initDB();
@@ -19,7 +23,7 @@ async function addTask(task) {
     alert('Task is required');
   }
   
-  await db.add('tasks', {task});
+  await db.add('tasks', task);
 }
 
 async function deleteTask(task) {
@@ -27,7 +31,7 @@ async function deleteTask(task) {
   await db.delete('tasks', task.id);
 }
 
-async function getTasks() {
+export async function getTasks() {
   const db = await initDB();
   const allTasks = await db.getAll('tasks');
   return allTasks;
@@ -49,6 +53,9 @@ export function doDBOperations(task, operation) {
       return getTasks();
     case 'drop':
       return dropTable();
+    case "update":
+      return updateTask(task);
+
     default:
       throw new Error(`Invalid operation: ${operation}`);
   }
