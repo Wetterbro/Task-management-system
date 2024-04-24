@@ -9,14 +9,13 @@ export default function TaskItem({ id, title, priority, category, message, delet
 
     const handleCheckboxChange = (event) => {
         setIsChecked(event.target.checked);
-
         doDBOperations({ id, title, priority, category, message, completed: event.target.checked }, 'update');
     };
 
     const handleDelete = (id) => {
         console.log('deleting task with id', id);
         doDBOperations({ id }, 'delete');
-        deleteTask();
+        deleteTask(true); 
     }
 
 

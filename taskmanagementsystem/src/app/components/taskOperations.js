@@ -5,10 +5,6 @@ async function initDB() {
   return await createDatabase();
 }
 
-async function dropTable() {
-  const db = await initDB();
-  db.deleteObjectStore('tasks');
-}
 
 async function updateTask(task) {
   const db = await initDB();
@@ -51,11 +47,8 @@ export function doDBOperations(task, operation) {
       return deleteTask(task);
     case 'get':
       return getTasks();
-    case 'drop':
-      return dropTable();
     case "update":
       return updateTask(task);
-
     default:
       throw new Error(`Invalid operation: ${operation}`);
   }

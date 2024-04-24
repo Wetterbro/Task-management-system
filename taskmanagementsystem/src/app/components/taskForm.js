@@ -4,7 +4,6 @@ import { doDBOperations } from './taskOperations';
 
 const TaskForm = ({ onFormSubmit }) => {
     const [taskName, setTaskName] = useState('')
-
     const [number, setNumber] = useState(1);
 
     const handleNumberChange = (event) => {
@@ -20,7 +19,6 @@ const TaskForm = ({ onFormSubmit }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log('submitting');
         const titleInput = document.getElementById('title-input');
         const messageInput = document.getElementById('message');
         const categoryInput = document.getElementById('category');

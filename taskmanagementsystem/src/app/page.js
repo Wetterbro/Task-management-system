@@ -9,6 +9,7 @@ export default function Home() {
   const [buttonPressed, setButtonPressed] = useState(false);
   const [tasks, setTasks] = useState([]);
 
+
   useEffect(() => {
     const fetchTasks = async () => {
       const newTasks = await getTasks();
@@ -16,10 +17,10 @@ export default function Home() {
   };
     if (buttonPressed) {
       fetchTasks();
-      console.log('tasks', tasks);
     }
     setButtonPressed(false);
 }, [buttonPressed]);
+
 
 useEffect(() => {
   const fetchTasks = async () => {
@@ -45,9 +46,7 @@ fetchTasks();
       </section>
 
       <div>
-      <TaskList
-        allTasks={tasks}
-      ></TaskList>
+        <TaskList allTasks={tasks} setButtonPressed={setButtonPressed} />
       </div>
 
     </main>
