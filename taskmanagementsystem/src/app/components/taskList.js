@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import {useState } from 'react';
 import TaskItem from './taskItem.js';
-import useTasks from "./useTasks.js";
 import cookies from 'js-cookie';
 
 
