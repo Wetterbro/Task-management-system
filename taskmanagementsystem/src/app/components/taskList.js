@@ -6,6 +6,7 @@ import cookies from 'js-cookie';
 
 export default function TaskList({ allTasks, setButtonPressed }) {
 
+    // keeps track of the category filter
     const [category, setCategory] = useState(() => {
         const saved = cookies.get('Category');
         const initialValue = saved || 'All';
@@ -13,18 +14,21 @@ export default function TaskList({ allTasks, setButtonPressed }) {
         return initialValue;
     });
 
+    // keeps track of the priority filter
     const [isChecked, setIsChecked] = useState(() => {
         const saved = cookies.get('Prio');
         const initialValue = saved === 'true' ? true : false;
         return initialValue;
     });
 
+    // Function to handle the checkbox change
     const handleCheckboxChange = (event) => {
-        cookies.set("Prio", !isChecked, { expires: 1 }) ;
+        cookies.set("Prio", !isChecked, { expires: 1 });
         setIsChecked(event.target.checked);
         setButtonPressed(true);
     };
 
+    // Function to handle the category change
     const handleCategoryChange = (event) => {
         setCategory(event.target.value);
         cookies.set("Category", event.target.value, { expires: 1 });
@@ -33,9 +37,9 @@ export default function TaskList({ allTasks, setButtonPressed }) {
     return (
         <>
             <hr className=" border-t-2 border-gray-200 my-7" />
-            <div className="mt-11 w-1/4 mx-auto">
+            <div className="mt-11 w-3/4 md:w-1/4 mx-auto">
                 <label className="block mb-5 text-sm font-medium text-gray-900">Select an filter option</label>
-                <select id="category" onChange={handleCategoryChange} defaultValue={category} value={category} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                <select id="category" onChange={handleCategoryChange} value={category} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                     <option value="All">Choose a category</option>
                     <option value="All">All</option>
                     <option value="Work">Work</option>
@@ -53,30 +57,45 @@ export default function TaskList({ allTasks, setButtonPressed }) {
             </div>
 
 
-            <div className="flex items-center justify-center">
-                <ul className="list flex-col">
-                    {allTasks.length === 0 && 'No Tasks'}
-                    {allTasks
-                        .filter(task => category === 'All' || task.category === category)
-                        .sort((a, b) => isChecked ? b.priority - a.priority : a.id - b.id)
-                        .map(task => {
-                            if (task.title === undefined || task.id === undefined) {
-                                return
-                            }
+            <div className="flex justify-center mb-28 px-5">
+                {Array.isArray(allTasks) ? (
+                    allTasks.length === 0 ? (
+                        'No Tasks'
+                    ) : (
+                        (() => {
+                            const filteredAndSortedTasks = allTasks
+                                .filter(task => category === 'All' || task.category === category)
+                                .sort((a, b) => isChecked ? b.priority - a.priority : a.id - b.id);
+
+                            const gridLayout = filteredAndSortedTasks.length > 1 ? 'grid grid-flow-row-dense grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4' : '';
+                            const noTasksMessage = filteredAndSortedTasks.length === 0 ? `No Tasks with selected filter option: ${category}` : null;
+
                             return (
-                                <TaskItem
-                                    key={task.id}
-                                    id={task.id}
-                                    title={task.title}
-                                    message={task.message}
-                                    completed={task.completed}
-                                    priority={task.priority}
-                                    category={task.category}
-                                    deleteTask={setButtonPressed}
-                                />
-                            )
-                        })}
-                </ul>
+                                <div className={`flex items-center justify-center ${gridLayout}`}>
+                                    {noTasksMessage || filteredAndSortedTasks.map(task => {
+                                        if (!task || typeof task !== 'object' || !task.id || !task.title) {
+                                            return <div>Error: Invalid task object</div>;
+                                        }
+                                        return (
+                                            <TaskItem
+                                                key={task.id}
+                                                id={task.id}
+                                                title={task.title}
+                                                message={task.message}
+                                                completed={task.completed}
+                                                priority={task.priority}
+                                                category={task.category}
+                                                deleteTask={setButtonPressed}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                            );
+                        })()
+                    )
+                ) : (
+                    <div>Error: loaded data is not of the correct form</div>
+                )}
             </div>
         </>
     );

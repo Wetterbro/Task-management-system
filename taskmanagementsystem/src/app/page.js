@@ -9,7 +9,7 @@ export default function Home() {
   const [buttonPressed, setButtonPressed] = useState(false);
   const [tasks, setTasks] = useState([]);
 
-
+  // update the tasks when the button is pressed
   useEffect(() => {
     const fetchTasks = async () => {
       const newTasks = await getTasks();
@@ -21,7 +21,7 @@ export default function Home() {
     setButtonPressed(false);
 }, [buttonPressed]);
 
-
+// fetch the tasks when the page loads
 useEffect(() => {
   const fetchTasks = async () => {
     const newTasks = await getTasks();
@@ -36,7 +36,7 @@ fetchTasks();
   return (
     <main>
      <nav>
-      <h1 className="flex justify-center my-10">Task Management System</h1>
+      <h1 className="flex justify-center my-10 text-2xl">Task Management System</h1>
       </nav>
 
       <section className="flex justify-center font-bold">
