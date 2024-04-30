@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import TaskForm from "@/app/components/taskForm";
 import TaskList from "@/app/components/taskList";
 import { getTasks } from "./components/taskOperations.js";
+import SearchComponent from "@/app/components/SearchComponent";
 
 
 export default function Home() {
@@ -10,24 +11,26 @@ export default function Home() {
   const [tasks, setTasks] = useState([]);
 
   // update the tasks when the button is pressed
-  useEffect(() => {
-    const fetchTasks = async () => {
-      const newTasks = await getTasks();
-      setTasks(newTasks);
-  };
-    if (buttonPressed) {
-      fetchTasks();
-    }
-    setButtonPressed(false);
-}, [buttonPressed]);
-
+    useEffect(() => {
+        console.log("buttonPressed", buttonPressed);
+        const fetchTasks = async () => {
+            try {
+                const newTasks = await getTasks();
+                setTasks(newTasks);
+            } catch (error) {
+                console.error("Failed to fetch tasks:", error);
+            }
+        };
+        fetchTasks().catch(error => console.error("Failed to fetch tasks:", error));
+        setButtonPressed(false);
+    }, [buttonPressed]);
+    
 // fetch the tasks when the page loads
 useEffect(() => {
   const fetchTasks = async () => {
     const newTasks = await getTasks();
     setTasks(newTasks);
 };
-
 fetchTasks();
 }, []);
 
@@ -45,6 +48,8 @@ fetchTasks();
       }} />
       </section>
 
+       
+        
       <div>
         <TaskList allTasks={tasks} setButtonPressed={setButtonPressed} />
       </div>

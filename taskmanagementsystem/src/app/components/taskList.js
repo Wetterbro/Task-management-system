@@ -1,15 +1,16 @@
-import {useState } from 'react';
+import {useEffect, useState} from 'react';
 import TaskItem from './taskItem.js';
 import cookies from 'js-cookie';
+import SearchComponent from "@/app/components/SearchComponent";
 
 
 export default function TaskList({ allTasks, setButtonPressed }) {
-
+    
+    
     // keeps track of the category filter
     const [category, setCategory] = useState(() => {
         const saved = cookies.get('Category');
         const initialValue = saved || 'All';
-        console.log('category', initialValue);
         return initialValue;
     });
 
@@ -53,6 +54,8 @@ export default function TaskList({ allTasks, setButtonPressed }) {
                     <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Show tasks with high priority first</span>
                 </label>
 
+                <SearchComponent tasks={allTasks} tasksUpdate={setButtonPressed} setButtonPressed={setButtonPressed} />
+
             </div>
 
 
@@ -84,7 +87,7 @@ export default function TaskList({ allTasks, setButtonPressed }) {
                                                 completed={task.completed}
                                                 priority={task.priority}
                                                 category={task.category}
-                                                deleteTask={setButtonPressed}
+                                                updateTasks={setButtonPressed}
                                             />
                                         );
                                     })}

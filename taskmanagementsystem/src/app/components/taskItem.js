@@ -3,7 +3,7 @@ import TaskForm from './taskForm';
 import { useState } from 'react';
 import { doDBOperations } from './taskOperations';
 
-export default function TaskItem({ id, title, priority, category, message, deleteTask, completed }) {
+export default function TaskItem({ id, title, priority, category, message, updateTasks, completed }) {
 
     // state to keep track of the checkbox
     const [isChecked, setIsChecked] = useState(completed || false);
@@ -12,13 +12,14 @@ export default function TaskItem({ id, title, priority, category, message, delet
     const handleCheckboxChange = (event) => {
         setIsChecked(event.target.checked);
         doDBOperations({ id, title, priority, category, message, completed: event.target.checked }, 'update');
+        updateTasks(true);
     };
 
     // Function to handle the delete button
     const handleDelete = (id) => {
         console.log('deleting task with id', id);
         doDBOperations({ id }, 'delete');
-        deleteTask(true);
+        updateTasks(true);
     }
 
 
@@ -48,7 +49,7 @@ export default function TaskItem({ id, title, priority, category, message, delet
                     Delete
                 </button>
 
-                <input checked={isChecked} onChange={handleCheckboxChange} id="green-checkbox" type="checkbox" value="" className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500" />
+                <input checked={completed} onChange={handleCheckboxChange} id="green-checkbox" type="checkbox" value="" className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500" />
                 <label className="ms-2 text-sm font-medium text-gray-900">Done!</label>
 
             </div>
